@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import CountUp from  'react-countup';
+import formatCurrency from "../../utils/formatCurrency";
 
 import { Container } from "./styles";
 
@@ -34,13 +34,7 @@ const WallerBox: React.FC<IWalletBoxProps> = ({
     <Container color={color}>
       <span>{title}</span>
       <h1>
-          <CountUp  
-                end={amount}
-                prefix={"R$ "}
-                separator="."
-                decimal=","
-                decimals={2}
-          />
+          {formatCurrency(amount)}
       </h1>
       <small>{footerLabel}</small>
       {<img src={iconSelected} alt={title} />}
