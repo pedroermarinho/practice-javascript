@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 
 import SelecInput from "../../components/SelectInput";
 
@@ -30,23 +30,23 @@ const Dashboard: React.FC = () => {
   );
   const [yearSelected, setYearSelected] = useState<number>(2020);
 
-  function handleMonthSelected(month: string): void | undefined {
+  const handleMonthSelected = useCallback( (month: string)=> {
     try {
       const parseMonth = Number(month);
       setMonthSelected(parseMonth);
     } catch (error) {
       throw new Error("invalid month value");
     }
-  }
+  },[])
 
-  function handleYearSelected(year: string): void | undefined {
+  const handleYearSelected= useCallback( (year: string)=> {
     try {
       const parseYear = Number(year);
       setYearSelected(parseYear);
     } catch (error) {
       throw new Error("invalid year value");
     }
-  }
+  },[]);
   const months = useMemo(() => {
     return listOfMonths.map((month, index) => {
       return {
@@ -262,6 +262,45 @@ const Dashboard: React.FC = () => {
     ];
   }, [monthSelected, yearSelected]);
 
+  const relationGainsRecurrentVersusEventual = useMemo(() => {
+    let amountRecurrent = 0;
+    let amountEventual = 0;
+
+    gains
+      .filter((gain) => {
+        const date = new Date(gain.date);
+        const yaer = date.getFullYear();
+        const month = date.getMonth();
+
+        return month === monthSelected && yaer === yearSelected;
+      })
+      .forEach((gain) => {
+        if (gain.frequency === "recorrente") {
+          return (amountRecurrent += Number(gain.amount));
+        }
+        if (gain.frequency === "eventual") {
+          return (amountEventual += Number(gain.amount));
+        }
+      });
+
+    const total = amountRecurrent + amountEventual;
+
+    return [
+      {
+        name: "Recorrentes",
+        amount: amountRecurrent,
+        percent: Number(((amountRecurrent / total) * 100).toFixed(1)),
+        color: "#F7931B",
+      },
+      {
+        name: "Eventuais",
+        amount: amountEventual,
+        percent: Number(((amountEventual / total) * 100).toFixed(1)),
+        color: "#E44C4E",
+      },
+    ];
+  }, [monthSelected, yearSelected]);
+
   return (
     <Container>
       <ContentHeader title="Dasborad" lineColor="#fff">
@@ -316,7 +355,7 @@ const Dashboard: React.FC = () => {
         />
         <BarChartBox 
             title="Entrada"
-            data={relationExpensevesRecurrentVersusEventual} 
+            data={relationGainsRecurrentVersusEventual } 
         />
       </Content>
     </Container>
