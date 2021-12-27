@@ -1,4 +1,21 @@
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
+
+
+const animate = keyframes`
+
+    0% {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    50% {
+        opacity: .3;
+    }
+    100%{
+        transform: translateX(0px);
+        opacity: 1;
+    }
+
+`;
 
 
 interface ITagProps{
@@ -29,6 +46,8 @@ export const Container = styled.li `
         transform: translateX(10px);
     }
 
+
+
     >div{
         display: flex;
         flex-direction: column;
@@ -40,6 +59,8 @@ export const Container = styled.li `
         font-size: 22px;
         font-weight: 500;
     }
+
+    animation: ${animate} .5s;
 
 `;
 

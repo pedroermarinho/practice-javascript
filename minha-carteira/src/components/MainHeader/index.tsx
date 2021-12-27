@@ -2,11 +2,9 @@ import React,{useMemo, useState } from "react";
 
 import { useTheme } from "../../hooks/theme";
 
-import emojis from "../../utils/emojis";
+import emojis from "../../utils/emojis";                                                                           
 
-import Toggle from "../Toggle";
-
-import { Container, Profile, Welcome, UserName } from "./styles";
+import { Container, Profile, Welcome, UserName,Toggle } from "./styles";
 
 const MainHeader: React.FC = ()=> {
 
@@ -23,7 +21,7 @@ const MainHeader: React.FC = ()=> {
     const handleChageTheme = ()=>{
         setTheme(!isDarkTheme);
         toggleTheme();
-    }
+    }     
 
     return (
         <Container>

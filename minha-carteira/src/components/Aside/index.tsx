@@ -1,14 +1,40 @@
-import React from "react";
+import React ,{useState}from "react";
 import logoImg from '../../assets/logo.svg'
 
-import { MdDashboard, MdArrowDownward, MdArrowUpward,MdExitToApp} from 'react-icons/md';
+import { MdDashboard, MdArrowDownward, MdArrowUpward,MdExitToApp, MdClose,MdMenu} from 'react-icons/md';
 
-import { Container, Header, LogImg,MenuContainer,MenuItemLink, Title } from "./styles";
+import { Container, Header, LogImg,MenuContainer,MenuItemLink, Title, ToggleMenu, ThemeToggleFotter } from "./styles";
+
+import { useAuth } from "../../hooks/auth";
+
+import { useTheme } from "../../hooks/theme";
+
+import Toggle from "../Toggle";
 
 const Aside: React.FC = ()=> {
+
+    const {singOut} = useAuth();
+    const {toggleTheme,theme} = useTheme();
+
+
+    const [toggleMenuIsOpened, setToggleMenuIsOpened] = useState<boolean>(true);
+    const [isDarkTheme, setTheme] = useState(()=> theme.title==='dark'? true: false);
+
+    const handleToggleMenu= () =>{
+        setToggleMenuIsOpened(!toggleMenuIsOpened);
+    }
+
+    const handleChageTheme = ()=>{
+        setTheme(!isDarkTheme);
+        toggleTheme();
+    }    
+
     return (
-        <Container>
+        <Container menuIsOpen={toggleMenuIsOpened}>
             <Header>
+                <ToggleMenu onClick={handleToggleMenu}>
+                    {toggleMenuIsOpened?<MdMenu/>:<MdClose/>}
+                </ToggleMenu>
                 <LogImg src={logoImg} alt="Logo Minha Carteira" />
                 <Title> Minha Carteira</Title>
             </Header>
@@ -25,11 +51,21 @@ const Aside: React.FC = ()=> {
                     <MdArrowDownward/>
                     Saídas
                 </MenuItemLink>
-                <MenuItemLink href="#">
+                <MenuItemLink onClick={()=> singOut()}>
                     <MdExitToApp/>
                     Sair
                 </MenuItemLink>
             </MenuContainer>
+
+            <ThemeToggleFotter menuIsOpen={toggleMenuIsOpened}>
+            <Toggle
+                labelLeft="Light"
+                labelRight="Dark"
+                checked={isDarkTheme}
+                onChange={handleChageTheme}
+            />            
+            </ThemeToggleFotter>
+            
         </Container>
     );
 }
