@@ -4,11 +4,14 @@ import Item from "./Item";
 import {ITarefa} from "../../types/tarefa";
 
 
-
+interface Props {
+    tarefas:ITarefa[],
+    selecionaTarefa:(tarefaSelecionada:ITarefa) => void
+}
 
 
 function Lista(
-    {tarefas}:{tarefas:ITarefa[]}
+    {tarefas, selecionaTarefa}:Props
 ) {
 
 
@@ -18,7 +21,11 @@ function Lista(
             <ul>
                 {tarefas.map((item, index) => {
                     return (
-                        <Item {...item} key={index} />
+                        <Item
+                            selecionaTarefa={selecionaTarefa}
+                            {...item}
+                            key={index}
+                        />
                     )
                 })}
             </ul>
